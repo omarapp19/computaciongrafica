@@ -1,137 +1,88 @@
-// Paquete del proyecto
 package proyecto;
 
-// Imports de las Vistas
 import proyecto.LoginView;
 import proyecto.EstudiantesView;
 import proyecto.RepresentantesView;
 import proyecto.HistorialView;
-import java.awt.Image; // <--- ¡AÑADE ESTA LÍNEA!
+import java.awt.Image; 
 import javax.swing.JToolBar;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.net.URL;
 import javax.swing.JOptionPane; 
-import java.awt.BorderLayout; // Import para el Layout
+import java.awt.BorderLayout; 
 
 public class MainView extends javax.swing.JFrame {
 
-    // Referencia al Login
     private LoginView vistaLoginDeOrigen;
     
-    
-    /**
-     * Constructor por defecto
-     */
     public MainView() {
         initComponents();
         configurarVentana();
-        crearToolBar(); // <--- Llamada a la barra de botones
+        crearToolBar(); 
     }
     
-    /**
-     * Constructor que usamos desde el Login.
-     */
     public MainView(LoginView login) {
         initComponents();
-        this.vistaLoginDeOrigen = login; // Guardamos la referencia
+        this.vistaLoginDeOrigen = login; 
         configurarVentana();
-        crearToolBar(); // <--- Llamada a la barra de botones
+        crearToolBar(); 
     }
     
-    /**
-     * Centraliza la configuración de la ventana.
-     */
     private void configurarVentana() {
-        // MainView cierra toda la aplicación
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        // Maximizar al abrir
         this.setExtendedState(MAXIMIZED_BOTH); 
     }
     
-    /**
-     * Crea la barra de herramientas (JToolBar) y la añade al Frame.
-     */
-    /**
-     * Crea la barra de herramientas (JToolBar) [VERSIÓN ACTUALIZADA CON ESCALADO]
-     */
     private void crearToolBar() {
-        // 1. Crear la barra
         JToolBar toolBar = new JToolBar();
-        toolBar.setFloatable(false); // Para que no se pueda arrastrar
+        toolBar.setFloatable(false); 
         
-        // --- 2. Definir el tamaño de los iconos ---
-        // ¡Puedes cambiar esto a 32x32 si lo prefieres!
         int iconAncho = 50;
         int iconAlto = 50;
         
-        // --- 3. Crear los botones ---
-        
-        // Botón Estudiantes
         JButton btnEstudiantes = new JButton("Estudiantes");
         btnEstudiantes.setToolTipText("Gestionar Estudiantes");
-        // ¡Llamamos al método ayudante!
         btnEstudiantes.setIcon(cargarIconoEscalado("estudiante.png", iconAncho, iconAlto));
         btnEstudiantes.addActionListener(this::itemGestionEstudiantesActionPerformed);
         
-        // Botón Representantes
         JButton btnRepresentantes = new JButton("Representantes");
         btnRepresentantes.setToolTipText("Gestionar Representantes");
-        // ¡Llamamos al método ayudante!
         btnRepresentantes.setIcon(cargarIconoEscalado("padre.png", iconAncho, iconAlto));
         btnRepresentantes.addActionListener(this::itemGestionRepresentantesActionPerformed);
 
-        // Botón Historial
         JButton btnHistorial = new JButton("Historial");
         btnHistorial.setToolTipText("Ver Historial General");
-        // ¡Llamamos al método ayudante!
         btnHistorial.setIcon(cargarIconoEscalado("historial.png", iconAncho, iconAlto));
         btnHistorial.addActionListener(this::itemVerHistorialActionPerformed);
 
-        // Botón cerrar sesion 
         JButton btnCerrar = new JButton("Cerrar Sesión");
         btnCerrar.setToolTipText("Volver a la pantalla de Login");
-        // ¡Llamamos al método ayudante!
         btnCerrar.setIcon(cargarIconoEscalado("cerrar.png", iconAncho, iconAlto));
         btnCerrar.addActionListener(this::itemCerrarSesionActionPerformed);
         
-        // Botón Salir (Cierra la aplicación)
         JButton btnSalir = new JButton("Salir");
         btnSalir.setToolTipText("Cerrar la aplicación por completo");
-        // ¡¡CAMBIA "salir.png" por el nombre de tu icono!!
          btnSalir.setIcon(cargarIconoEscalado("salir.png", iconAncho, iconAlto));
-        // ¡¡IMPORTANTE: Llama al método 'itemSalirActionPerformed'!!
         btnSalir.addActionListener(this::itemSalirActionPerformed);
         
-        // --- 4. Añadir botones a la barra ---
         toolBar.add(btnEstudiantes);
         toolBar.add(btnRepresentantes);
         toolBar.add(btnHistorial);
-        toolBar.add(new JToolBar.Separator()); // Una línea separadora
+        toolBar.add(new JToolBar.Separator()); 
         toolBar.add(btnCerrar);
         toolBar.add(btnSalir);
         
-        // --- 5. Añadir la barra al JFrame ---
-        // (Esto usa la corrección del BorderLayout que hicimos antes)
         this.getContentPane().setLayout(new java.awt.BorderLayout());
         this.getContentPane().add(toolBar, java.awt.BorderLayout.NORTH);
         this.getContentPane().add(escritorioPrincipal, java.awt.BorderLayout.CENTER);
     }
     
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        // --- ¡¡¡EL CAMBIO MÁGICO!!! ---
-        // Aquí le decimos a NetBeans que use TU clase de fondo
         escritorioPrincipal = new JDesktopPaneConFondo();
-        // --- FIN DEL CAMBIO ---
         
         menuBar = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
@@ -146,7 +97,6 @@ public class MainView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menú Principal - Sistema de Administración de Dojo");
 
-        // Esta línea ya no es necesaria, pero no hace daño
         escritorioPrincipal.setBackground(new java.awt.Color(45, 45, 45));
 
         javax.swing.GroupLayout escritorioPrincipalLayout = new javax.swing.GroupLayout(escritorioPrincipal);
@@ -222,9 +172,6 @@ public class MainView extends javax.swing.JFrame {
 
         setJMenuBar(menuBar);
 
-        // ¡¡¡OJO!!! NetBeans genera un GroupLayout aquí. 
-        // Lo ignoramos, porque nuestro método 'crearToolBar'
-        // lo va a SOBRESCRIBIR con el BorderLayout.
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -241,28 +188,18 @@ public class MainView extends javax.swing.JFrame {
 
    private ImageIcon cargarIconoEscalado(String nombreIcono, int ancho, int alto) {
         try {
-            // El usuario me indicó que sus iconos están en /assets/
-            // ¡OJO! Si tu paquete 'assets' está DENTRO de 'proyecto',
-            // la ruta debe ser "/proyecto/assets/" + nombreIcono
             URL url = getClass().getResource("/assets/" + nombreIcono);
             
             if (url != null) {
-                // 1. Cargar la imagen original
                 ImageIcon originalIcon = new ImageIcon(url);
-                
-                // 2. Obtener la imagen base
                 Image img = originalIcon.getImage();
-                
-                // 3. Crear una versión escalada (con alta calidad)
                 Image scaledImg = img.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
-                
-                // 4. Devolver un nuevo ImageIcon hecho con la imagen escalada
                 return new ImageIcon(scaledImg);
             }
         } catch (Exception e) {
             System.err.println("Icono no encontrado o error al escalar: " + nombreIcono);
         }
-        return null; // Devuelve null si algo falla
+        return null; 
     }
     
     private void itemCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {                                                 
@@ -308,18 +245,13 @@ public class MainView extends javax.swing.JFrame {
         } catch (java.beans.PropertyVetoException e) {}
     }                                                
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the FlatLaf look and feel */
         try {
             javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainView().setVisible(true);
@@ -339,7 +271,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenu menuGestion;
     private javax.swing.JMenu menuHistorial;
     // End of variables declaration                   
-} // <--- ¡¡¡ESTA ES LA ÚNICA Y ÚLTIMA LLAVE DE LA CLASE!!!
+}
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -359,9 +291,7 @@ public class MainView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-        //</editor-fold>
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-}

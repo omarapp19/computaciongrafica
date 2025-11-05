@@ -1,120 +1,111 @@
-// Paquete del proyecto
 package proyecto;
 
-// Imports de DB
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-// Imports de UI
 import javax.swing.table.DefaultTableModel;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.DefaultListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
-// Imports de los JDialogs
 import proyecto.SeleccionarRepresentanteView;
 import proyecto.AgregarExamenView;
-import proyecto.AgregarCertificadoView; // <-- ¡NUEVO!
+import proyecto.AgregarCertificadoView; 
 
 public class EstudiantesView extends javax.swing.JInternalFrame {
 
-    // --- Variables de Control ---
+
     private boolean modoEdicion = false; 
     private String cedulaRepresentanteSeleccionado = null;
     
-    // --- Modelos de Listas ---
+
     private DefaultListModel<String> modeloListaExamenes;
-    private DefaultListModel<String> modeloListaCertificados; // <-- ¡NUEVO!
+    private DefaultListModel<String> modeloListaCertificados; 
     private TableRowSorter<DefaultTableModel> sorter;
     
-    /**
-     * Creates new form EstudiantesView
-     */
+   
+
     public EstudiantesView() {
         initComponents();
         
-        // --- MODIFICACIONES DEL CONSTRUCTOR ---
-        // 3. Preparamos los modelos de las listas
+  
         modeloListaExamenes = new DefaultListModel<>();
         listaExamenes.setModel(modeloListaExamenes);
         modeloListaCertificados = new DefaultListModel<>();
         listaCertificados.setModel(modeloListaCertificados);
         
-        // 4. Llenamos la tabla principal
+
         cargarTablaEstudiantes();
         
-        // --- ¡¡¡NUEVO BLOQUE #1!!! ---
-        // (Añade esto DESPUÉS de cargarTablaEstudiantes)
-        // 5. Inicializar y aplicar el Sorter (filtro)
+    
         DefaultTableModel modelo = (DefaultTableModel) tablaEstudiantes.getModel();
         sorter = new TableRowSorter<>(modelo);
         tablaEstudiantes.setRowSorter(sorter);
-        // --- FIN DE NUEVO BLOQUE #1 ---
+
         
         
-        // 5. Añadimos el "oyente" a la tabla principal (esto ya lo tenías)
+
         tablaEstudiantes.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-            // ... (tu código de oyente de tabla) ...
+
         });
         
         
-        // --- ¡¡¡NUEVO BLOQUE #2!!! ---
-        // (Añade esto al FINAL del constructor)
-        // 6. Añadimos el "oyente" al campo de búsqueda
+
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                // Llama a nuestro nuevo método de filtrado
+           
                 filtrarTablaEstudiantes();
             }
         });
-        // 1. Quitar barra de título
+
         this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         BasicInternalFrameUI ui = (BasicInternalFrameUI) this.getUI();
         ui.setNorthPane(null);
         
-        // 2. Estado inicial de botones
+   
         habilitarCampos(false);
         btnGuardar.setEnabled(false);
         btnCancelar.setEnabled(false);
         btnNuevo.setEnabled(true);
         
-        // 3. Preparamos los modelos de las listas
+
         modeloListaExamenes = new DefaultListModel<>();
         listaExamenes.setModel(modeloListaExamenes);
         
-        modeloListaCertificados = new DefaultListModel<>(); // <-- ¡NUEVO!
-        listaCertificados.setModel(modeloListaCertificados); // <-- ¡NUEVO!
+        modeloListaCertificados = new DefaultListModel<>(); 
+        listaCertificados.setModel(modeloListaCertificados); 
         
-        // 4. Llenamos la tabla principal
+    
         cargarTablaEstudiantes();
         
-        // 5. Añadimos el "oyente" a la tabla principal
+       
         tablaEstudiantes.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
             if (!e.getValueIsAdjusting() && tablaEstudiantes.getSelectedRow() != -1) {
                 String cedula = tablaEstudiantes.getValueAt(tablaEstudiantes.getSelectedRow(), 0).toString();
                 
-                // Carga ambas listas
+    
                 cargarExamenes(cedula);
-                cargarCertificados(cedula); // <-- ¡NUEVO!
+                cargarCertificados(cedula); 
             }
         });
     }
     
-    // --- MÉTODOS DE LÓGICA ---
+
     
     private void filtrarTablaEstudiantes() {
         String texto = txtBuscar.getText().trim();
         
         if (texto.isEmpty()) {
-            // Si no hay texto, no hay filtro
+  
             sorter.setRowFilter(null);
         } else {
-            // (?i) activa el modo "insensible a mayúsculas/minúsculas"
-            // El filtro buscará el texto en CUALQUIER columna
+          
+
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
         }
     }
@@ -126,9 +117,7 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
         btnBuscarRepresentante.setEnabled(enabled);
     }
     
-    /**
-     * MODIFICADO: Ahora limpia ambas listas
-     */
+   
     private void limpiarCampos() {
         txtCedula.setText("");
         txtNombre.setText("");
@@ -137,7 +126,7 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
         this.cedulaRepresentanteSeleccionado = null; 
         
         modeloListaExamenes.clear();
-        modeloListaCertificados.clear(); // <-- ¡NUEVO!
+        modeloListaCertificados.clear(); 
     }
     
     private void cargarTablaEstudiantes() {
@@ -209,10 +198,7 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
     }
     
     
-    // --- ¡¡¡MÉTODO TOTALMENTE NUEVO!!! ---
-    /**
-     * Carga el historial de certificados de un estudiante.
-     */
+ 
     private void cargarCertificados(String cedulaEstudiante) {
         modeloListaCertificados.clear();
         Connection conn = Conexion.getConexion();
@@ -240,11 +226,7 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
     }
 
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
@@ -621,8 +603,6 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>                        
 
-    // --- MÉTODOS DE EVENTOS (BOTONES) ---
-    
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {                                          
         this.dispose();
     }                                         
@@ -738,9 +718,9 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
         txtCedula.setEnabled(false); 
         this.modoEdicion = true; 
         
-        // Forzamos la carga del historial al modificar
+     
         cargarExamenes(cedula);
-        cargarCertificados(cedula); // <-- ¡NUEVO!
+        cargarCertificados(cedula); 
     }                                            
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {                                            
@@ -759,9 +739,7 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
         
         if (confirmacion == JOptionPane.YES_OPTION) {
             Connection conn = Conexion.getConexion();
-            // ¡¡¡PELIGRO!!! Esto DEBE BORRAR EN CASCADA o fallará
-            // Si no configuraste ON DELETE CASCADE en la BD, 
-            // primero debes borrar los exámenes y certificados.
+           
             String sql = "DELETE FROM estudiantes WHERE cedula = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, cedula);
@@ -804,7 +782,7 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
     }
     
     
-    // --- ¡¡¡MÉTODO TOTALMENTE NUEVO!!! ---
+
     private void btnAgregarCertificadoActionPerformed(java.awt.event.ActionEvent evt) {
         int fila = tablaEstudiantes.getSelectedRow();
         if (fila < 0) {
@@ -813,19 +791,19 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
         }
         String cedulaEstudiante = tablaEstudiantes.getValueAt(fila, 0).toString();
         
-        // 1. Crear el nuevo JDialog
+
         AgregarCertificadoView dialog = new AgregarCertificadoView(this, true, cedulaEstudiante);
         
-        // 2. Mostrarlo
+    
         dialog.setVisible(true);
         
-        // 3. Refrescar si se guardó algo
+  
         if (dialog.isGuardadoExitoso()) {
             cargarCertificados(cedulaEstudiante);
         }
     }
     
-    // Variables declaration - do not modify                     
+                   
     private javax.swing.JButton btnAgregarCertificado;
     private javax.swing.JButton btnAgregarExamen;
     private javax.swing.JButton btnBuscarRepresentante;
@@ -858,7 +836,7 @@ public class EstudiantesView extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtRepresentanteNombre;
-    // End of variables declaration                   
+             
 }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
