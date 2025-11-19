@@ -19,11 +19,11 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.geometry.Box; 
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
 import java.net.URL; 
-
-// --- IMPORTS NUEVOS ---
+import proyecto.ProfesoresView;
+import proyecto.HorariosView;
 import javax.media.j3d.RotationInterpolator;
 import javax.media.j3d.Alpha;
-// --- FIN DE IMPORTS NUEVOS ---
+
 
 
 public class MainView extends javax.swing.JFrame {
@@ -51,6 +51,7 @@ public class MainView extends javax.swing.JFrame {
     }
     
     private void crearToolBarYEscena3D() {
+        // --- 1. CREACIÓN DEL TOOLBAR ---
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false); 
         
@@ -66,6 +67,30 @@ public class MainView extends javax.swing.JFrame {
         btnRepresentantes.setToolTipText("Gestionar Representantes");
         btnRepresentantes.setIcon(cargarIconoEscalado("padre.png", iconAncho, iconAlto));
         btnRepresentantes.addActionListener(this::itemGestionRepresentantesActionPerformed);
+
+        // --- NUEVO BOTÓN: PROFESORES ---
+        JButton btnProfesores = new JButton("Profesores");
+        btnProfesores.setToolTipText("Gestionar Profesores y Asignar Clases");
+        // Nota: Si no tienes profesor.png, usa estudiante.png temporalmente
+        btnProfesores.setIcon(cargarIconoEscalado("profesor.png", iconAncho, iconAlto)); 
+        btnProfesores.addActionListener(e -> {
+            ProfesoresView vistaProfe = new ProfesoresView();
+            escritorioPrincipal.add(vistaProfe);
+            vistaProfe.setVisible(true);
+            try { vistaProfe.setSelected(true); } catch (Exception ex) {}
+        });
+
+        // --- NUEVO BOTÓN: HORARIOS ---
+        JButton btnHorarios = new JButton("Horarios");
+        btnHorarios.setToolTipText("Ver Cronograma Semanal");
+        // Nota: Si no tienes calendario.png, usa historial.png temporalmente
+        btnHorarios.setIcon(cargarIconoEscalado("horario.png", iconAncho, iconAlto));
+        btnHorarios.addActionListener(e -> {
+            HorariosView vistaHorario = new HorariosView();
+            escritorioPrincipal.add(vistaHorario);
+            vistaHorario.setVisible(true);
+            try { vistaHorario.setSelected(true); } catch (Exception ex) {}
+        });
 
         JButton btnHistorial = new JButton("Historial");
         btnHistorial.setToolTipText("Ver Historial General");
@@ -84,11 +109,15 @@ public class MainView extends javax.swing.JFrame {
         
         toolBar.add(btnEstudiantes);
         toolBar.add(btnRepresentantes);
+        toolBar.add(btnProfesores); // Agregado
+        toolBar.add(btnHorarios);   // Agregado
         toolBar.add(btnHistorial);
         toolBar.add(new JToolBar.Separator()); 
         toolBar.add(btnCerrar);
         toolBar.add(btnSalir);
         
+        
+        // --- 2. CREACIÓN DE LA ESCENA 3D (EL RESTO SIGUE IGUAL) ---
         
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas3D = new Canvas3D(config);
